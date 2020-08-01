@@ -7,7 +7,9 @@ const router = express.Router();
  * @route	GET /
  */
 router.get('/', (req, res, next) => {
-	res.send('Login')
+	res.render('Login', {
+		layout: 'login',
+	})
 });
 
 /**
@@ -15,7 +17,7 @@ router.get('/', (req, res, next) => {
  * @route	GET /dashboard
  */
 router.get('/dashboard', (req, res, next) => {
-	res.send('dashboard')
+	res.render('dashboard')
 });
 
 module.exports = router;
