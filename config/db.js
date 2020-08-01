@@ -11,6 +11,7 @@ const connectDB = async () => {
 		})
 		console.log(`mongodb connected ${conn.connection.host}`);
 	} catch (error) {
+		console.log('fucking error');
 		console.error(error);
 		process.exit(1);
 	}
