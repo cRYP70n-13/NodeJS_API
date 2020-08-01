@@ -5,6 +5,8 @@ const exphbs = require('express-handlebars');
 const path = require('path');
 const passport = require('passport');
 const session  = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
 
@@ -35,7 +37,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
 	secret: 'cRYP70N',
 	resave: false,
-	saveUninitialized: false
+	saveUninitialized: false,
+	store: new MongoStore({
+		mongooseConnection: mongoose.connection
+	})
 }));
 
 // the passport middleware
