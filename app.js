@@ -21,7 +21,7 @@ connectDB();
 
 // Requiring my routes
 const indexRoute = require('./routes/index.routes.js');
-const authRoutes = require('routes/auth.routes');
+const authRoutes = require('./routes/auth.routes');
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
