@@ -1,0 +1,11 @@
+{
+  "name": "nodeapp",
+  "version": "1.0.0",
+  "description": "this is a nodejs express mongodb and google OAuth application for the sake of learning",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "cRYP70N",
+  "license": "MIT"
+}
