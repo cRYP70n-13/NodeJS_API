@@ -9,7 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
-const { formatDate } = require('./helpers/hbs');
+const { formatDate, truncate, stripTags, editIcon } = require('./helpers/hbs');
 
 // Load config file
 dotenv.config({path: './config/config.env'});
@@ -54,9 +54,18 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
+// Set global variable
+app.use(function (req, res, next) {
+	res.locals.user = req.user || null;
+	next();
+})
+
 // Handlebars
 app.engine('.hbs', exphbs({helpers: {
-	formatDate
+	formatDate,
+	stripTags,
+	truncate,
+	editIcon
 }, defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
