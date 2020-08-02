@@ -53,17 +53,37 @@ router.post('/', ensureAuth, async (req, res, next) => {
  * @route	GET /stories/edit/:id
  */
 router.get('/edit/:id', ensureAuth, async (req, res, next) => {
-	const story = await Story.findById({_id: req.params.id}).lean();
+	const story = await Story.findOne({
+		_id: req.params.id
+	}).lean()
+
+	if (story.user != req.user.id) {
+		res.redirect('stories');
+	} else {
+		res.render('stories/edit', {
+			story,
+		})
+	}
+});
+
+/**
+ * @desc	update story
+ * @route	PUT /stories/:id
+ */
+router.put('/:id', ensureAuth, async (req, res, next) => {
+	let story = await Story.findById(req.params.id).lean()
+
 	if (!story) {
 		return res.render('error/404');
 	}
-
-	if (story.user !== req.user.id) {
+	if (story.user != req.user.id) {
 		res.redirect('stories');
 	} else {
-		res.render('story/edit', {
-			story,
+		story = await story.findOne({ _id: req.params.id }, req.body, {
+			new: true,
+			runValidators: true
 		})
+		res.redirect('/dashboard');
 	}
 });
 
