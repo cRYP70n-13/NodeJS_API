@@ -9,6 +9,7 @@ const MongoStore = require('connect-mongo')(session);
 const mongoose = require('mongoose');
 
 const connectDB = require('./config/db');
+const { formatDate } = require('./helpers/hbs');
 
 // Load config file
 dotenv.config({path: './config/config.env'});
@@ -24,11 +25,17 @@ connectDB();
 // Requiring my routes
 const indexRoute = require('./routes/index.routes.js');
 const authRoutes = require('./routes/auth.routes');
+const storiesRoutes = require('./routes/stories.routes');
+const { ppid } = require('process');
 
 // Logging
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
+
+// Body parser
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 // Static folder
 app.use(express.static(path.join(__dirname, 'public')));
@@ -48,11 +55,14 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // Handlebars
-app.engine('.hbs', exphbs({defaultLayout: 'main', extname: '.hbs'}));
+app.engine('.hbs', exphbs({helpers: {
+	formatDate
+}, defaultLayout: 'main', extname: '.hbs'}));
 app.set('view engine', '.hbs');
 
 // Routes
 app.use('/', indexRoute);
 app.use('/auth', authRoutes);
+app.use('/stories', storiesRoutes);
 
 app.listen(PORT, () => console.log('this shit is up and running'));
