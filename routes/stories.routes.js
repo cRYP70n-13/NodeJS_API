@@ -15,6 +15,24 @@ router.get('/add', ensureAuth, (req, res, next) => {
 });
 
 /**
+ * @desc	Show all the public stories
+ * @route	GET /stories
+ */
+router.get('/', ensureAuth, async (req, res, next) => {
+	try {
+		const stories = await Story.find({ status: 'public' })
+			.populate('user')
+			.sort({ createdAt: 'desc'})
+			.lean()
+		res.render('stories/index', {
+			stories
+		});
+	} catch (error) {
+		console.error(error)
+	}
+});
+
+/**
  * @desc	Process and form
  * @route	POST /stories
  */
