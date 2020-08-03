@@ -148,7 +148,7 @@ router.get('/user/:userId', ensureAuth, async (req, res, next) => {
 		.lean()
 
 		res.render('stories/index', {
-			stories
+			stories,
 		});
 	} catch (error) {
 		console.error(error);
