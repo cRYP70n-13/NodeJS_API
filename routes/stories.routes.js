@@ -38,7 +38,7 @@ router.get('/', ensureAuth, async (req, res, next) => {
  */
 router.get('/:id', ensureAuth, async (req, res, next) => {
 	try {
-		let story = await Story.findById(req.params.id)
+		const story = await Story.findById(req.params.id)
 			.populate('user')
 			.lean()
 		
@@ -131,6 +131,28 @@ router.delete('/:id', ensureAuth, async(req, res, next) => {
 	} catch (error) {
 		console.error(error);
 		return res.render('errors/500');
+	}
+});
+
+/**
+ * @desc	User stories
+ * @route	GET /stories/user/:id
+ */
+router.get('/user/:userId', ensureAuth, async (req, res, next) => {
+	try {
+		const stories = await Story.find({
+			user: req.params.userId,
+			status: 'public'
+		})
+		.populate('user')
+		.lean()
+
+		res.render('stories/index', {
+			stories
+		});
+	} catch (error) {
+		console.error(error);
+		return res.render('errors/404');
 	}
 });
 
